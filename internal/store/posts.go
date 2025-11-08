@@ -14,17 +14,17 @@ type PostStore struct {
 
 func (s *PostStore) Create(ctx context.Context, post *model.Post) error {
 	query := `
-		INSERT INTO posts (content, title, user_id, tags)
+		INSERT INTO posts (user_id, tags, title, content)
 		VALUES ($1, $2, $3, $4) RETURNING id, created_at, updated_at
 		`
 
 	if err := s.db.QueryRowContext(
 		ctx,
 		query,
-		post.Content,
-		post.Title,
 		post.UserID,
 		pq.Array(post.Tags),
+		post.Title,
+		post.Content,
 	).Scan(
 		&post.ID,
 		&post.CreatedAt,
