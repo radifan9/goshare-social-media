@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"social/internal/store"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -11,6 +12,7 @@ import (
 
 type application struct {
 	config config
+	store  store.Storage
 }
 
 type config struct {
@@ -23,7 +25,7 @@ func (app *application) mount() http.Handler {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+	r.Use(middleware.Recoverer) // Recover from panic
 
 	// Timeout
 	r.Use(middleware.Timeout(60 * time.Second))
