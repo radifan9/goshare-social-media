@@ -19,6 +19,7 @@ func GetString(key, fallback string) string {
 func GetInt(key string, fallback int) int {
 	val, ok := os.LookupEnv(key)
 	if !ok {
+		log.Printf("can't find env with key : %s", key)
 		return fallback
 	}
 
